@@ -86,80 +86,54 @@
 
         <form id="appForm" action="https://sheetdb.io/api/v1/i2epcguy7pecm" method="POST" enctype="multipart/form-data">
             
-            <div class="form-group">
-                <label for="firstname">First Name</label>
-                <input type="text" id="firstname" name="first_name" placeholder="Enter first name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="lastname">Last Name</label>
-                <input type="text" id="lastname" name="last_name" placeholder="Enter last name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Gender</label>
-                <div class="gender-options">
-                    <div>
-                        <input type="radio" id="male" name="gender" value="male" required>
-                        <label for="male">Male</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="female" name="gender" value="female">
-                        <label for="female">Female</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="example@mail.com" required>
-            </div>
-
-            <div class="form-group">
-                <label for="resume">Upload Resume</label>
-                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
-            </div>
-
-            <button type="submit">Submit</button>
-
-        </form>
+         <div class="form-group">
+        <label>First Name</label>
+        <input type="text" name="data[firstname]" required>
     </div>
 
-    <script>
-        document.getElementById('appForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // Stop page from reloading/redirecting
-            
-            const button = this.querySelector('button');
-            const originalText = button.innerText;
-            button.innerText = "Sending...";
-            button.disabled = true;
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" name="data[lastname]" required>
+    </div>
 
-            const formData = new FormData(this);
+    <div class="form-group">
+        <label>Gender</label>
+        <select name="data[gender]">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
 
-            try {
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: formData
-                });
+    <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="data[email]" required>
+    </div>
 
-                const result = await response.json();
-                
-                if(response.ok) {
-                    alert("Success: " + (result.message || "Application Submitted!"));
-                } else {
-                    // This shows the exact error from the server in an alert
-                    alert("Error: " + (result.message || "Submission failed"));
-                    console.log(result);
-                }
-            } catch (error) {
-                alert("Network Error: Could not connect to server.");
-                console.error(error);
-            }
+    <div class="form-group">
+        <label>Upload Resume</label>
+        <input type="file" name="data[resume]">
+    </div>
 
-            button.innerText = originalText;
-            button.disabled = false;
-        });
-    </script>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+  // This script prevents the page from redirecting to a JSON response
+  var form = document.getElementById('applicationForm');
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    fetch(form.action, {
+        method : "POST",
+        body: new FormData(document.getElementById("applicationForm")),
+    }).then(
+        response => response.json()
+    ).then((html) => {
+      alert('Success! Data saved.');
+      // You can redirect them somewhere else if you want
+      // window.location.href = 'thankyou.html'; 
+    });
+  });
+</script>
 
 </body>
 
