@@ -1,134 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Form</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-
-        .form-group { margin-bottom: 15px; }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        input[type="text"], input[type="email"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        input:focus { border-color: #007BFF; outline: none; }
-
-        .gender-options {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .gender-options label {
-            margin-bottom: 0;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover { background-color: #0056b3; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Application</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    .form-container { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    button:hover { background: #218838; }
+  </style>
 </head>
 <body>
 
-    <div class="form-container">
-        <h2>Job Application</h2>
+  <div class="form-container">
+    <h2>Job Application</h2>
 
-        <form id="appForm" action="https://sheetdb.io/api/v1/i2epcguy7pecm" method="POST" enctype="multipart/form-data">
-            
-         <div class="form-group">
+    <form id="appForm">
+
+      <div class="form-group">
         <label>First Name</label>
-        <input type="text" name="data[fname]" required>
-    </div>
+        <input type="text" name="fname" required>
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>Last Name</label>
-        <input type="text" name="data[lname]" required>
-    </div>
+        <input type="text" name="lname" required>
+      </div>
 
-    <div class="form-group">
-        <label>gender</label>
-      <input type="text" name="data[gender]" required>
-    </div>
+      <div class="form-group">
+        <label>Gender</label>
+        <input type="text" name="gender" required>
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>Email Address</label>
-        <input type="email" name="data[email]" required>
-    </div>
+        <input type="email" name="email" required>
+      </div>
 
-    <button type="submit">Submit</button>
-</form>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 
-<script>
-  // This script prevents the page from redirecting to a JSON response
-  var form = document.getElementById('applicationForm');
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    fetch(form.action, {
-        method : "POST",
-        body: new FormData(document.getElementById("applicationForm")),
-    }).then(
-        response => response.json()
-    ).then((html) => {
-      alert('Success! Data saved.');
-      // You can redirect them somewhere else if you want
-      // window.location.href = 'thankyou.html'; 
+  <script>
+    // This script intercepts the form submit and sends it as JSON to MockAPI
+    document.getElementById('appForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Stop the page from reloading/redirecting
+
+      // 1. Collect the data from the form
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      // 2. Send to MockAPI (UPDATE YOUR URL HERE IF NEEDED)
+      fetch('https://6961fed1d9d64c761906adaf.mockapi.io/api/formdetail/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Success! Data saved.');
+          // Optional: Clear the form
+          document.getElementById('appForm').reset();
+        } else {
+          alert('Error saving data.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Network error.');
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
-
 </html>
 
 
